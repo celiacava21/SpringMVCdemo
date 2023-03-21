@@ -11,7 +11,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 import com.example.entities.Estudiante;
+import com.example.entities.Facultad;
 import com.example.services.EstudianteService;
+import com.example.services.FacultadService;
 
 @Controller
 @RequestMapping("/")
@@ -20,6 +22,9 @@ public class MainController {
 
     @Autowired
     private EstudianteService estudianteService; 
+
+    @Autowired
+    private FacultadService facultadService;
 
     /**
      * El método siguiente devuelve un listado de estudiantes
@@ -37,12 +42,15 @@ public class MainController {
     }
 
     /**
-     * Muestra el formulario de estudiante
+     * Muestra el formulario de alta de estudiante
      */
     @GetMapping("/frmAltaEstudiante")
     public String formularioAltaEstudiante(Model model) {
 
+        List<Facultad> facultades = facultadService.findAll();
+
         model.addAttribute("estudiante", new Estudiante());
+        model.addAttribute("facultades", facultades);
         return "views/formularioAltaEstudiante";
     }
 }
