@@ -2,13 +2,16 @@ package com.example.controllers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,13 +63,15 @@ public class MainController {
 
         List<Facultad> facultades = facultadService.findAll();
 
-        model.addAttribute("estudiante", new Estudiante());
+        Estudiante estudiante = new Estudiante();
+
+        model.addAttribute("estudiante", estudiante);
         model.addAttribute("facultades", facultades);
         return "views/formularioAltaEstudiante";
     }
     /**Método que recibe los datos procedentes de los controles del formulario */
     
-    @PostMapping("/altaEstudiante")
+    @PostMapping("/altaModificacionEstudiante")
     public String altaEstudiante(@ModelAttribute Estudiante estudiante, 
         @RequestParam(name = "numerosTelefonos") String telefonosRecibidos) {
 
@@ -105,4 +110,30 @@ public class MainController {
         
 
     }
+
+    /**Método muestra el formulario que ACTUALIZA UN ESTUDIANTE */
+
+    @GetMapping("/frmActualizar/{id}")
+    public String frmActualizarEstudiante(@PathVariable(name = "id") int idEstudiante, 
+    Model model) {
+
+        Estudiante estudiante = estudianteService.findbyId(idEstudiante);
+
+        List<Telefono> todosTelefonos = telefonoService.findAll();
+        List<Telefono> telefonosDelEstudiante = todosTelefonos.stream()
+        .filter(telefono -> telefono.getEstudiante().getId() == idEstudiante)
+        .collect(Collectors.toList());
+
+            String numerosDeTelefono = telefonosDelEstudiante.stream()
+            .map(telefono -> telefono.getNumero()).collect(Collectors.joining(";"));
+
+        List<Facultad> facultades = facultadService.findAll();
+
+        model.addAttribute("estudiante", estudiante);
+        model.addAttribute("telefonos", numerosDeTelefono);
+        model.addAttribute("facultades", facultades);
+
+        return "views/formularioAltaEstudiante";
+    }
+
 }

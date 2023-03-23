@@ -7,6 +7,8 @@ import java.util.List;
  * Este tipo de comentarios son de java doc. se pone así
  */
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -44,8 +46,13 @@ public class Estudiante implements Serializable {
     private String nombre;
     private String primerApellido;
     private String segundoApellido;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaAlta;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaNacimiento;
+
     private Genero genero;
     private double beca;
     
