@@ -42,5 +42,15 @@ public class TelefonoServiceImpl implements TelefonoService{
     public void deleteByEstudiante(Estudiante estudiante) {
         telefonoDao.deleteByEstudiante(estudiante);
     }
+
+    @Override
+    public List<Telefono> findByEstudiante(Estudiante estudiante) {
+        return telefonoDao.findByEstudiante(estudiante);
+    
+    }
+
+   
+
+    
     
 }

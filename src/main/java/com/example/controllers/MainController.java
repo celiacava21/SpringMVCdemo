@@ -145,4 +145,19 @@ estudianteService.delete(estudianteService.findbyId(idEstudiante));
 
 return "redirect:/listar";
 }
+
+/**Método que da detalles de estudiantes */
+@GetMapping("/detalles/{id}")
+public String detallesEstudiante(@PathVariable(name = "id") int id, Model model) {
+
+    Estudiante estudiante = estudianteService.findbyId(id);
+
+    List<Telefono> telefonos = telefonoService.findByEstudiante(estudiante);
+    List<String> numerosTelefono = telefonos.stream().map(t -> t.getNumero())
+    .toList();
+    model.addAttribute("telefonos", numerosTelefono);
+    model.addAttribute("estudiante", estudiante);
+
+    return "views/detallesEstudiante";
+}
 }

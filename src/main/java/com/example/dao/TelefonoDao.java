@@ -1,5 +1,7 @@
 package com.example.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.entities.Estudiante;
@@ -20,5 +22,5 @@ public interface TelefonoDao extends JpaRepository<Telefono, Integer>{
      /**Para encontrar una lista de teléfonos a partir de un estudiante concreto se utiliza la 
       * consulta siguiente:
       */
-     //List<Telefono> findByEstudiante(Estudiante estudiante);
+     List<Telefono> findByEstudiante(Estudiante estudiante);
 }
