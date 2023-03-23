@@ -76,12 +76,9 @@ public class MainController {
         @RequestParam(name = "numerosTelefonos") String telefonosRecibidos) {
 
 
-            LOG.info("telefonos recibidos: " + telefonosRecibidos);
-            /**lo que aparece en el split entre "" es por lo que quiero que vayan separados los telefonos.
-             * 
-             * ponemos que telefonos no puede ser null, pero perfectamente se podría haber 
-             * puesto que no pudiera ser null. 
-            */
+            LOG.info("Telefonos recibidos: " + telefonosRecibidos);
+            estudianteService.save(estudiante);
+           
 
             List<String> listadoNumerosTelefonos = null;
 
@@ -91,11 +88,14 @@ public class MainController {
             listadoNumerosTelefonos = Arrays.asList(arrayTelefonos);
 
             }
-        estudianteService.save(estudiante);
+
             /*la n dentro del for each es como poner numero, que es lo que va pasando 
              * por la tubería
              */
+
+             /**Borrar todos los teléfonos que tenga el estudiante, si hay que insertar nuevos. */
             if(listadoNumerosTelefonos != null) {
+                telefonoService.deleteByEstudiante(estudiante);
                 listadoNumerosTelefonos.stream().forEach(n -> {
                     Telefono telefonoObject = Telefono.builder().numero(n)
                     .estudiante(estudiante).build();
@@ -136,4 +136,13 @@ public class MainController {
         return "views/formularioAltaEstudiante";
     }
 
+
+/**Método que borra estudiantes */
+@GetMapping("/borrar/{id}")
+public String borrarEstudiante(@PathVariable(name = "id") int idEstudiante) {
+
+estudianteService.delete(estudianteService.findbyId(idEstudiante));
+
+return "redirect:/listar";
+}
 }
